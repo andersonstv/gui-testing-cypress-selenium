@@ -93,7 +93,6 @@ describe('countries', () => {
     cy.get('*[class^="ui toggle checkbox"]').click();
     cy.get('[id="sylius_save_changes_button"]').scrollIntoView().click();
     cy.get('body').should('contain', 'Country has been successfully updated.');
-  // Implement the remaining test cases in a similar manner
   });
   it('check error when not informing the name of the province which is required', () => {
     cy.clickInFirst('a[href="/admin/countries/"]');
