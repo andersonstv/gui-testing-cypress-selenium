@@ -6,7 +6,7 @@ describe('countries', () => {
     cy.get('.primary').click();
   });
   // Remove .only and implement others test cases!
-  it.only('add and remove province in United Kingdom', () => {
+  it('add and remove province in United Kingdom', () => {
     // Click in countries in side menu
     cy.clickInFirst('a[href="/admin/countries/"]');
     // Select only enabled countries
@@ -36,12 +36,78 @@ describe('countries', () => {
     // Assert that country has been updated
     cy.get('body').should('contain', 'Country has been successfully updated.');
   });
-  it('test case 2', () => {
-    // Implement your test case 2 code here
+  it('testing filter starts with letter C', () => {
+    cy.clickInFirst('a[href="/admin/countries/"]');
+    cy.get('#criteria_code_type').select('Starts with');
+    cy.get('[id="criteria_code_value"]').type('C');
+    cy.get('*[class^="ui blue labeled icon button"]').click();
+    cy.get('tr.item:nth-child(1) > td:nth-child(1)').should('contain', 'CA');
   });
-  it('test case 3', () => {
-    // Implement your test case 3 code here
+  it('test informing province code in wrong format', () => {
+        // Navigating to country edit menu
+    cy.clickInFirst('a[href="/admin/countries/"]');
+    cy.get('[id="criteria_enabled"]').select('Yes');
+    cy.get('*[class^="ui blue labeled icon button"]').click();
+    cy.get('*[class^="ui labeled icon button "]').last().click();
+    // Adding province with code AU/QLD
+    cy.get('.ui > .ui > .required > #sylius_country_provinces > .ui').click();
+    cy.get('[id="sylius_country_provinces_0_code"]').type('AU/QUE');
+    cy.get('[id="sylius_country_provinces_0_name"]').type('Queensland');
+    cy.get('[id="sylius_save_changes_button"]').scrollIntoView().click();
+    cy.get('body').should('contain', 'This form contains errors.');
   });
+  it('test creating province with already used code', () => {
+    // Navigating to country edit menu
+    cy.clickInFirst('a[href="/admin/countries/"]');
+    cy.get('[id="criteria_enabled"]').select('Yes');
+    cy.get('*[class^="ui blue labeled icon button"]').click();
+    cy.get('*[class^="ui labeled icon button "]').last().click();
+    // Adding first province with code AU-QLD
+    cy.get('.ui > .ui > .required > #sylius_country_provinces > .ui').click();
+    cy.get('[id="sylius_country_provinces_0_code"]').type('AU-QLD');
+    cy.get('[id="sylius_country_provinces_0_name"]').type('Queensland');
+    cy.get('[id="sylius_save_changes_button"]').scrollIntoView().click();
+    // Adding second province with same code
+    cy.get('.ui > .ui > .required > #sylius_country_provinces > .ui').click();
+    cy.get('[id="sylius_country_provinces_1_code"]').type('AU-QLD');
+    cy.get('[id="sylius_country_provinces_1_name"]').type('Queensland2');
+    cy.get('[id="sylius_save_changes_button"]').scrollIntoView().click();
+
+    cy.get('body').should('contain', 'This form contains errors.');
+  });
+  
+  it('test creating province with same name and different code', () => {
+    // Navigating to country edit menu
+    cy.clickInFirst('a[href="/admin/countries/"]');
+    cy.get('[id="criteria_enabled"]').select('Yes');
+    cy.get('*[class^="ui blue labeled icon button"]').click();
+    cy.get('*[class^="ui labeled icon button "]').last().click();
+    // Adding first province with code AU-QLD
+    cy.get('.ui > .ui > .required > #sylius_country_provinces > .ui').click();
+    cy.get('[id="sylius_country_provinces_0_code"]').type('AU-QLD');
+    cy.get('[id="sylius_country_provinces_0_name"]').type('Queensland');
+    cy.get('[id="sylius_save_changes_button"]').scrollIntoView().click();
+    // Adding second province with different code but same name
+    cy.get('.ui > .ui > .required > #sylius_country_provinces > .ui').click();
+    cy.get('[id="sylius_country_provinces_1_code"]').type('AU-VIC');
+    cy.get('[id="sylius_country_provinces_1_name"]').type('Queensland');
+    cy.get('[id="sylius_save_changes_button"]').scrollIntoView().click();
+
+    cy.get('body').should('contain', 'This form contains errors.');
+  });
+  it('test create provinces with same abbreviation, should not cause error', () => {
+    cy.clickInFirst('a[href="/admin/countries/"]');
+    // Navigating to country edit menu
+    cy.clickInFirst('a[href="/admin/countries/"]');
+    cy.get('[id="criteria_enabled"]').select('Yes');
+    cy.get('*[class^="ui blue labeled icon button"]').click();
+    cy.get('*[class^="ui labeled icon button "]').last().click();
+    // Adding first province with code AU-QLD
+    cy.get('.ui > .ui > .required > #sylius_country_provinces > .ui').click();
+    cy.get('[id="sylius_country_provinces_0_code"]').type('AU-QLD');
+    cy.get('[id="sylius_country_provinces_0_name"]').type('Queensland');
+    cy.get('[id="sylius_save_changes_button"]').scrollIntoView().click();
+  }); 
 
   // Implement the remaining test cases in a similar manner
 });
