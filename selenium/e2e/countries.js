@@ -214,16 +214,23 @@ describe('countries', () => {
     await driver.findElement(By.css('.ui > .ui > .required > #sylius_country_provinces > .ui')).click();
     await driver.findElement(By.id('sylius_country_provinces_0_code')).sendKeys('FR-PAR');
     await driver.findElement(By.id('sylius_country_provinces_0_name')).sendKeys('Paris');
+    // Save changes
+    await driver.findElement(By.id('sylius_save_changes_button')).click();
     // Filling second province
     await driver.findElement(By.css('.ui > .ui > .required > #sylius_country_provinces > .ui')).click();
     await driver.findElement(By.id('sylius_country_provinces_1_code')).sendKeys('FR-PAR');
     await driver.findElement(By.id('sylius_country_provinces_1_name')).sendKeys('Brittany');
-    // Save changes
+    // Try to save changes
     await driver.findElement(By.id('sylius_save_changes_button')).click();
-
     // Assert that country has been updated
     const bodyText = await driver.findElement(By.tagName('body')).getText();
     assert(bodyText.includes('This form contains errors.'));
+    // Deleting ensures that this test does not alter the environment
+    await driver.findElement(By.css('.required > #sylius_country_provinces > div:nth-child(1) > div:nth-child(2) > a:nth-child(2)')).click();
+    await driver.findElement(By.css('.required > #sylius_country_provinces > div > div > .red')).click();
+    await driver.findElement(By.id('sylius_save_changes_button')).click();
+    const bodyTextAfterRemove = await driver.findElement(By.tagName('body')).getText();
+    assert(bodyTextAfterRemove.includes('Country has been successfully updated.'));
   });
   it('test province name repeated', async () => {
     // Selecting Country
@@ -232,24 +239,30 @@ describe('countries', () => {
     await dropdown.findElement(By.xpath("//option[. = 'Yes']")).click();
     await driver.findElement(By.id('criteria_code_value')).sendKeys('NZ');
     await driver.findElement(By.css('*[class^="ui blue labeled icon button"]')).click();
-
     // Navigate to Edit Country
     const buttons = await driver.findElements(By.css('*[class^="ui labeled icon button "]'));
     await buttons[buttons.length - 1].click();
-
     // Filling first province
     await driver.findElement(By.css('.ui > .ui > .required > #sylius_country_provinces > .ui')).click();
     await driver.findElement(By.id('sylius_country_provinces_0_code')).sendKeys('NZ-NTL');
     await driver.findElement(By.id('sylius_country_provinces_0_name')).sendKeys('Northland');
+    // Save changes
+    await driver.findElement(By.id('sylius_save_changes_button')).click();
     // Filling second province
     await driver.findElement(By.css('.ui > .ui > .required > #sylius_country_provinces > .ui')).click();
     await driver.findElement(By.id('sylius_country_provinces_1_code')).sendKeys('NZ-CAN');
     await driver.findElement(By.id('sylius_country_provinces_1_name')).sendKeys('Northland');
-    // Save changes
+    // Try to save changes
     await driver.findElement(By.id('sylius_save_changes_button')).click();
     // Assert that country has been updated
     const bodyText = await driver.findElement(By.tagName('body')).getText();
     assert(bodyText.includes('This form contains errors.'));
+    // Deleting ensures that this test does not alter the environment
+    await driver.findElement(By.css('.required > #sylius_country_provinces > div:nth-child(1) > div:nth-child(2) > a:nth-child(2)')).click();
+    await driver.findElement(By.css('.required > #sylius_country_provinces > div > div > .red')).click();
+    await driver.findElement(By.id('sylius_save_changes_button')).click();
+    const bodyTextAfterRemove = await driver.findElement(By.tagName('body')).getText();
+    assert(bodyTextAfterRemove.includes('Country has been successfully updated.'));
   });
 
   it('test create provinces with same abbreviation, should not cause error', async () => {
@@ -282,7 +295,6 @@ describe('countries', () => {
     assert(bodyText.includes('Country has been successfully updated.'));
 
     // Deleting ensures that this test does not alter the environment
-    
     await driver.findElement(By.css('.required > #sylius_country_provinces > div:nth-child(1) > div:nth-child(2) > a:nth-child(2)')).click();
     await driver.findElement(By.css('.required > #sylius_country_provinces > div > div > .red')).click();
     await driver.findElement(By.id('sylius_save_changes_button')).click();
