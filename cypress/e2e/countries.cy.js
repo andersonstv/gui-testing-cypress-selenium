@@ -134,7 +134,7 @@ describe('countries', () => {
     // Navigating to country edit menu
     cy.clickInFirst('a[href="/admin/countries/"]');
     cy.get('[id="criteria_enabled"]').select('Yes');
-    cy.get('[id="criteria_code_value"]').type('ES');
+    cy.get('[id="criteria_code_value"]').type('FR');
     cy.get('*[class^="ui blue labeled icon button"]').click();
     cy.get('*[class^="ui labeled icon button "]').last().click();
     // Adding first province with code AU-QLD
@@ -174,24 +174,28 @@ describe('countries', () => {
     // Navigating to country edit menu
     cy.clickInFirst('a[href="/admin/countries/"]');
     cy.get('[id="criteria_enabled"]').select('Yes');
-    cy.get('[id="criteria_code_value"]').type('DE');
+    cy.get('[id="criteria_code_value"]').type('CN');
     cy.get('*[class^="ui blue labeled icon button"]').click();
     cy.get('*[class^="ui labeled icon button "]').last().click();
     // Adding first province with code AU-QLD
     cy.get('.ui > .ui > .required > #sylius_country_provinces > .ui').click();
-    cy.get('[id="sylius_country_provinces_0_code"]').type('DE-BAV');
-    cy.get('[id="sylius_country_provinces_0_name"]').type('Bavaria');
-    cy.get('[id="sylius_country_provinces_0_abbreviation"]').type('German');
+    cy.get('[id="sylius_country_provinces_0_code"]').type('CN-GD');
+    cy.get('[id="sylius_country_provinces_0_name"]').type('Guangdong');
+    cy.get('[id="sylius_country_provinces_0_abbreviation"]').type('China');
 
     // Adding second province with different code but same name
     cy.get('.ui > .ui > .required > #sylius_country_provinces > .ui').click();
-    cy.get('[id="sylius_country_provinces_1_code"]').type('DE-HAM');
-    cy.get('[id="sylius_country_provinces_1_name"]').type('Hamburg');
-    cy.get('[id="sylius_country_provinces_0_abbreviation"]').type('German');
+    cy.get('[id="sylius_country_provinces_1_code"]').type('CN-FJ');
+    cy.get('[id="sylius_country_provinces_1_name"]').type('Fujian');
+    cy.get('[id="sylius_country_provinces_0_abbreviation"]').type('China');
     cy.get('[id="sylius_save_changes_button"]').scrollIntoView().click();
 
     cy.get('body').should('contain', 'Country has been successfully updated.');
-
+    // Deleting provinces to make sure tests are independent
+    cy.get('.required > #sylius_country_provinces > div:nth-child(1) > div:nth-child(2) > a:nth-child(2)').click();
+    cy.get('.required > #sylius_country_provinces > div > div > .red').click();
+    cy.get('[id="sylius_save_changes_button"]').scrollIntoView().click();
+    cy.get('body').should('contain', 'Country has been successfully updated.');
   }); 
     
     
