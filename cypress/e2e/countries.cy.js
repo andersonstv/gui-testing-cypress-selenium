@@ -141,7 +141,6 @@ describe('countries', () => {
     cy.get('.ui > .ui > .required > #sylius_country_provinces > .ui').click();
     cy.get('[id="sylius_country_provinces_0_code"]').type('AU-QLD');
     cy.get('[id="sylius_country_provinces_0_name"]').type('Queensland');
-    cy.get('[id="sylius_save_changes_button"]').scrollIntoView().click();
     // Adding second province with same code
     cy.get('.ui > .ui > .required > #sylius_country_provinces > .ui').click();
     cy.get('[id="sylius_country_provinces_1_code"]').type('AU-QLD');
@@ -162,7 +161,6 @@ describe('countries', () => {
     cy.get('.ui > .ui > .required > #sylius_country_provinces > .ui').click();
     cy.get('[id="sylius_country_provinces_0_code"]').type('AU-QLD');
     cy.get('[id="sylius_country_provinces_0_name"]').type('Queensland');
-    cy.get('[id="sylius_save_changes_button"]').scrollIntoView().click();
     // Adding second province with different code but same name
     cy.get('.ui > .ui > .required > #sylius_country_provinces > .ui').click();
     cy.get('[id="sylius_country_provinces_1_code"]').type('AU-VIC');
@@ -184,7 +182,6 @@ describe('countries', () => {
     cy.get('[id="sylius_country_provinces_0_code"]').type('DE-BAV');
     cy.get('[id="sylius_country_provinces_0_name"]').type('Bavaria');
     cy.get('[id="sylius_country_provinces_0_abbreviation"]').type('German');
-    cy.get('[id="sylius_save_changes_button"]').scrollIntoView().click();
 
     // Adding second province with different code but same name
     cy.get('.ui > .ui > .required > #sylius_country_provinces > .ui').click();
